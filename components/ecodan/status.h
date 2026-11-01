@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#define IS_BIT_SET(value, bit) (((value) & (1U << (bit))) != 0)
+#define ECODAN_IS_BIT_SET(value, bit) (((value) & (1U << (bit))) != 0)
 
 namespace esphome {
 namespace ecodan 
@@ -218,17 +218,17 @@ namespace ecodan
 
         bool has_cooling() const {
             // SW2-4
-            return IS_BIT_SET(DipSwitch2, 3);
+            return ECODAN_IS_BIT_SET(DipSwitch2, 3);
         }
 
         bool has_mixing_tank() const {
             // SW2-6
-            return IS_BIT_SET(DipSwitch2, 5);
+            return ECODAN_IS_BIT_SET(DipSwitch2, 5);
         }
 
         bool has_independent_zone_temps() const {
             //  SW2-7 is only valid active when SW3-6 is off
-            return has_mixing_tank() || (IS_BIT_SET(DipSwitch2, 6) && !IS_BIT_SET(DipSwitch3, 5));
+            return has_mixing_tank() || (ECODAN_IS_BIT_SET(DipSwitch2, 6) && !ECODAN_IS_BIT_SET(DipSwitch3, 5));
         }
 
         static bool zone_thermistors_fitted(float feed, float ret) {
@@ -277,16 +277,16 @@ namespace ecodan
         }
 
         bool has_zone_temps(Zone zone) const {
-            if (IS_BIT_SET(DipSwitch2, 6) && !IS_BIT_SET(DipSwitch3, 5))
+            if (ECODAN_IS_BIT_SET(DipSwitch2, 6) && !ECODAN_IS_BIT_SET(DipSwitch3, 5))
                 return true; // SW2-7: the controller regulates on the zone thermistors itself
             return has_mixing_tank() &&
                 (zone == Zone::ZONE_2 ? has_zone2_temps() : has_zone1_temps());
         }
 
         bool has_2zones() const {
-            if (IS_BIT_SET(DipSwitch3, 5) && !IS_BIT_SET(DipSwitch2, 6)) // SW3-6 True, SW2-7 False
+            if (ECODAN_IS_BIT_SET(DipSwitch3, 5) && !ECODAN_IS_BIT_SET(DipSwitch2, 6)) // SW3-6 True, SW2-7 False
                 return true; // z1, z2 -> same flow
-            if (IS_BIT_SET(DipSwitch2, 5) && IS_BIT_SET(DipSwitch2, 6)) // SW2-6 or SW2-7 True
+            if (ECODAN_IS_BIT_SET(DipSwitch2, 5) && ECODAN_IS_BIT_SET(DipSwitch2, 6)) // SW2-6 or SW2-7 True
                 return true; // z1, z2 -> independent flows
             
             return false;
