@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <cmath>
-#define IS_BIT_SET(value, bit) (((value) & (1U << (bit))) != 0)
+#define ECODAN_IS_BIT_SET(value, bit) (((value) & (1U << (bit))) != 0)
 
 namespace esphome {
 namespace ecodan 
@@ -219,17 +219,17 @@ namespace ecodan
 
         bool has_cooling() const {
             // SW2-4
-            return IS_BIT_SET(DipSwitch2, 3);
+            return ECODAN_IS_BIT_SET(DipSwitch2, 3);
         }
 
         bool has_mixing_tank() const {
             // SW2-6
-            return IS_BIT_SET(DipSwitch2, 5);
+            return ECODAN_IS_BIT_SET(DipSwitch2, 5);
         }
 
         bool has_mixing_valve() const {
             //  SW2-7 is only valid active when SW3-6 is off
-            return IS_BIT_SET(DipSwitch2, 6) && !IS_BIT_SET(DipSwitch3, 5);
+            return ECODAN_IS_BIT_SET(DipSwitch2, 6) && !ECODAN_IS_BIT_SET(DipSwitch3, 5);
         }
 
         bool has_independent_zone_temps() const {
@@ -284,9 +284,9 @@ namespace ecodan
         }
 
         bool has_2zones() const {
-            if (IS_BIT_SET(DipSwitch3, 5) && !IS_BIT_SET(DipSwitch2, 6)) // SW3-6 True, SW2-7 False
+            if (ECODAN_IS_BIT_SET(DipSwitch3, 5) && !ECODAN_IS_BIT_SET(DipSwitch2, 6)) // SW3-6 True, SW2-7 False
                 return true; // z1, z2 -> same flow
-            if (IS_BIT_SET(DipSwitch2, 5) && IS_BIT_SET(DipSwitch2, 6)) // SW2-6 or SW2-7 True
+            if (ECODAN_IS_BIT_SET(DipSwitch2, 5) && ECODAN_IS_BIT_SET(DipSwitch2, 6)) // SW2-6 or SW2-7 True
                 return true; // z1, z2 -> independent flows
             
             return false;
